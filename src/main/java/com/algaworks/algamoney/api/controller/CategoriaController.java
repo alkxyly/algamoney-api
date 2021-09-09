@@ -2,6 +2,7 @@ package com.algaworks.algamoney.api.controller;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -45,7 +46,8 @@ public class CategoriaController {
 	}
 	
 	@GetMapping("/{codigo}")
-	public Categoria buscaPeloCodigo(@PathVariable Long codigo) {
-		return categoriaRepository.findById(codigo).get();
+	public ResponseEntity<Categoria> buscaPeloCodigo(@PathVariable Long codigo) {
+		Optional<Categoria> categoria = categoriaRepository.findById(codigo);
+		return categoria.isPresent() ? ResponseEntity.ok(categoria.get()) : ResponseEntity.notFound().build();
 	}
 }
