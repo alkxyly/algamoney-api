@@ -17,13 +17,11 @@ public class PessoaService {
 	private PessoaRepository pessoaRepository;
 
 	public Pessoa atualizar(Pessoa pessoa,Long codigo) {
-		Optional<Pessoa> pessoaSalva = pessoaRepository.findById(codigo);
+		Pessoa pessoaSalva = pessoaRepository.findById(codigo)
+				.orElseThrow(() ->  new EmptyResultDataAccessException(1));
 
-		if(!pessoaSalva.isPresent())
-			throw new EmptyResultDataAccessException(1);
-
-		BeanUtils.copyProperties(pessoa, pessoaSalva.get(), "codigo");
-		pessoaRepository.save(pessoaSalva.get());
-		return pessoaSalva.get();
+		BeanUtils.copyProperties(pessoa, pessoaSalva, "codigo");
+		pessoaRepository.save(pessoaSalva);
+		return pessoaSalva;
 	}
 }
