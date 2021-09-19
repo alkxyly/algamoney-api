@@ -9,6 +9,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,7 +40,7 @@ public class CategoriaController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Categoria> criar(@RequestBody @Valid Categoria categoria, HttpServletResponse httpServletResponse) {
+	public ResponseEntity<Categoria> salvar(@RequestBody @Valid Categoria categoria, HttpServletResponse httpServletResponse) {
 		Categoria categoriaCriada = categoriaRepository.save(categoria);
 		eventPublisher.publishEvent(new RecursoCriadoEvent(this, httpServletResponse, categoriaCriada.getCodigo()));
 		return ResponseEntity.status(HttpStatus.CREATED).body(categoriaCriada);
@@ -47,7 +48,8 @@ public class CategoriaController {
 	
 	@GetMapping("/{codigo}")
 	public ResponseEntity<Categoria> buscaPeloCodigo(@PathVariable Long codigo) {
-		Optional<Categoria> categoria = categoriaRepository.findById(codigo);
-		return categoria.isPresent() ? ResponseEntity.ok(categoria.get()) : ResponseEntity.notFound().build();
+		Categoria categoria = categoriaRepository.findById(codigo)
+				.orElseThrow(() -> new EmptyResultDataAccessException(1));
+		return  ResponseEntity.ok(categoria);
 	}
 }
