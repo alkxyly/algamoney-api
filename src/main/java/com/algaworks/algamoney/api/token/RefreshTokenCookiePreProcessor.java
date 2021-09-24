@@ -31,7 +31,6 @@ public class RefreshTokenCookiePreProcessor implements Filter{
 				&& "refresh_token".equals(req.getParameter("grant_type"))
 				&& req.getCookies() != null) {
 			
-			
 		    String refreshToken = Stream.of(req.getCookies())  
 		    		.filter(cookie -> "refreshToken".equals(cookie.getName())) 
 		    	        .findFirst() 
