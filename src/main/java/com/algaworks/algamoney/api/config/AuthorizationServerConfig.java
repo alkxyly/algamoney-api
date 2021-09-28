@@ -18,7 +18,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
-	
+
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
@@ -27,19 +27,13 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-	    clients.inMemory()
-	            .withClient("angular")
-	            .secret(passwordEncoder.encode("@ngul@r0")) // @ngul@r0
-	            .scopes("read", "write")
-	            .authorizedGrantTypes("password", "refresh_token")
-	            .refreshTokenValiditySeconds(3600*24)
-	            .accessTokenValiditySeconds(1800)
-	        .and()
-	            .withClient("mobile")
-	            .secret(passwordEncoder.encode("m0b1l30")) // m0b1l30
-	            .scopes("read")
-	            .authorizedGrantTypes("password")
-	            .accessTokenValiditySeconds(1800);
+		clients.inMemory()
+		.withClient("angular")
+		.secret("$2a$10$G1j5Rf8aEEiGc/AET9BA..xRR.qCpOUzBZoJd8ygbGy6tb3jsMT9G")
+		.scopes("read", "write")
+		.authorizedGrantTypes("password", "refresh_token")
+		.accessTokenValiditySeconds(1800)
+		.refreshTokenValiditySeconds(3600 * 24);
 	}
 
 	@Override
