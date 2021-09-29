@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,11 +33,13 @@ public class CategoriaController {
 	private ApplicationEventPublisher eventPublisher;
 	
 	@GetMapping
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA') and hasAuthority('SCOPE_read')" )
 	public List<Categoria> listar(){
 		return categoriaRepository.findAll();
 	}
 	
 	@PostMapping
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA') and hasAuthority('SCOPE_write')")
 	public ResponseEntity<Categoria> salvar(@RequestBody @Valid Categoria categoria, HttpServletResponse httpServletResponse) {
 		Categoria categoriaCriada = categoriaRepository.save(categoria);
 		eventPublisher.publishEvent(new RecursoCriadoEvent(this, httpServletResponse, categoriaCriada.getCodigo()));
@@ -44,6 +47,7 @@ public class CategoriaController {
 	}
 	
 	@GetMapping("/{codigo}")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA') and hasAuthority('SCOPE_read')")
 	public ResponseEntity<Categoria> buscaPeloCodigo(@PathVariable Long codigo) {
 		Categoria categoria = categoriaRepository.findById(codigo)
 				.orElseThrow(() -> new EmptyResultDataAccessException(1));
