@@ -10,13 +10,12 @@ import lombok.Setter;
 @ConfigurationProperties("algamoney")
 public class AlgamoneyApiProperty {
 	
-	private final String originPermitida = "http://localhost:8000";
-	private final Seguranca seguranca =  new Seguranca();
+	private  Seguranca seguranca =  new Seguranca();
 	
 	@Getter
 	@Setter
 	public static class Seguranca{
 		private boolean enableHttps;
-		
+		private String origem =  "http://localhost:8000";
 	}
 }
