@@ -16,6 +16,6 @@ public class AlgamoneyApiProperty {
 	@Setter
 	public static class Seguranca{
 		private boolean enableHttps;
-		private String origem =  "http://localhost:8000";
+		private String origem =  "http://localhost:4200";
 	}
 }
